@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatório - Desvendando o Passado</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .relatorio-page {
+        min-height: 100vh;
+        padding: 2rem;
+        background: linear-gradient(135deg, #1a1625 0%, #2d1b3d 100%);
+      }
+
+      .relatorio-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .relatorio-header h1 {
+        font-size: 3rem;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+      }
+
+      .relatorio-container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .relatorio-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .relatorio-card h2 {
+        color: var(--secondary-color);
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-box {
+        background: rgba(139, 71, 137, 0.2);
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        border: 1px solid var(--primary-color);
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 900;
+        color: var(--accent-color);
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: var(--secondary-color);
+        font-size: 1rem;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      th {
+        background: rgba(139, 71, 137, 0.3);
+        color: var(--accent-color);
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .chart-container {
+        position: relative;
+        height: 400px;
+        margin-top: 2rem;
+      }
+
+      canvas {
+        max-width: 100%;
+        max-height: 400px;
+      }
+
+      .btn-voltar {
+        display: inline-block;
+        margin: 2rem 0;
+        padding: 1rem 2rem;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-voltar:hover {
+        background: var(--secondary-color);
+        transform: translateY(-3px);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 3rem;
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="relatorio-page">
+      <div class="relatorio-header">
+        <h1>📊 Relatório de Aprendizagem</h1>
+        <p style="color: var(--secondary-color); font-size: 1.2rem">
+          Desvendando o Passado - Análise de Resultados
+        </p>
+      </div>
+
+      <div class="relatorio-container" id="relatorio-content">
+        <div class="loading">⏳ Carregando dados...</div>
+      </div>
+
+      <div style="text-align: center">
+        <a href="/" class="btn-voltar">← Voltar ao Início</a>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Carregar dados do relatório
+      async function carregarRelatorio() {
+        try {
+          const response = await fetch("/api/relatorio");
+          const data = await response.json();
+
+          if (data.success) {
+            renderizarRelatorio(data);
+          } else {
+            document.getElementById("relatorio-content").innerHTML =
+              '<p class="loading" style="color: #f44336;">Erro ao carregar relatório.</p>';
+          }
+        } catch (error) {
+          console.error("Erro:", error);
+          document.getElementById("relatorio-content").innerHTML =
+            '<p class="loading" style="color: #f44336;">Erro ao conectar com o servidor.</p>';
+        }
+      }
+
+      function renderizarRelatorio(data) {
+        const container = document.getElementById("relatorio-content");
+
+        // Estatísticas gerais
+        let html = `
+                <div class="relatorio-card">
+                    <h2>📈 Estatísticas Gerais</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-number">${
+                              data.totalParticipantes
+                            }</span>
+                            <span class="stat-label">Participantes</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">${calcularMediaGeral(
+                              data.desempenho
+                            )}%</span>
+                            <span class="stat-label">Média de Acertos</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">${
+                              data.desempenho.length
+                            }</span>
+                            <span class="stat-label">Respostas Completas</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        // Gráfico de Pizza - Desempenho Geral
+        html += `
+                <div class="relatorio-card">
+                    <h2>🎯 Distribuição de Desempenho</h2>
+                    <div class="chart-container">
+                        <canvas id="chartDesempenho"></canvas>
+                    </div>
+                </div>
+            `;
+
+        // Análise por Questão
+        html += `
+                <div class="relatorio-card">
+                    <h2>📝 Análise por Questão</h2>
+                    <div class="chart-container">
+                        <canvas id="chartQuestoes"></canvas>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Questão</th>
+                                    <th>Total de Respostas</th>
+                                    <th>Acertos</th>
+                                    <th>Taxa de Acerto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+        data.analiseQuestoes.forEach((q) => {
+          html += `
+                    <tr>
+                        <td>Questão ${q.questao_numero}</td>
+                        <td>${q.total_respostas}</td>
+                        <td>${q.acertos}</td>
+                        <td><strong>${q.taxa_acerto}%</strong></td>
+                    </tr>
+                `;
+        });
+
+        html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+        // Desempenho Individual
+        html += `
+                <div class="relatorio-card">
+                    <h2>👥 Desempenho Individual</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Data</th>
+                                    <th>Acertos</th>
+                                    <th>Porcentagem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+        data.desempenho.forEach((d) => {
+          const data_formatada = new Date(d.data_realizacao).toLocaleString(
+            "pt-BR"
+          );
+          html += `
+                    <tr>
+                        <td>${d.nome}</td>
+                        <td>${data_formatada}</td>
+                        <td>${d.acertos}/${d.total_questoes}</td>
+                        <td><strong>${d.porcentagem}%</strong></td>
+                    </tr>
+                `;
+        });
+
+        html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+        // Análise de Feedback
+        html += `
+                <div class="relatorio-card">
+                    <h2>💭 Análise de Feedback</h2>
+                    <div class="chart-container">
+                        <canvas id="chartFeedback"></canvas>
+                    </div>
+                </div>
+            `;
+
+        container.innerHTML = html;
+
+        // Renderizar gráficos
+        renderizarGraficos(data);
+      }
+
+      function calcularMediaGeral(desempenho) {
+        if (desempenho.length === 0) return 0;
+        const soma = desempenho.reduce(
+          (acc, d) => acc + parseFloat(d.porcentagem),
+          0
+        );
+        return Math.round(soma / desempenho.length);
+      }
+
+      function renderizarGraficos(data) {
+        // Gráfico de Pizza - Desempenho
+        const ctxDesempenho = document.getElementById("chartDesempenho");
+        if (ctxDesempenho) {
+          const faixas = classificarDesempenho(data.desempenho);
+          new Chart(ctxDesempenho, {
+            type: "pie",
+            data: {
+              labels: [
+                "Excelente (80-100%)",
+                "Bom (60-79%)",
+                "Regular (40-59%)",
+                "Insuficiente (<40%)",
+              ],
+              datasets: [
+                {
+                  data: [
+                    faixas.excelente,
+                    faixas.bom,
+                    faixas.regular,
+                    faixas.insuficiente,
+                  ],
+                  backgroundColor: ["#4caf50", "#2196f3", "#ff9800", "#f44336"],
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  labels: { color: "#f0f0f0", font: { size: 14 } },
+                },
+              },
+            },
+          });
+        }
+
+        // Gráfico de Barras - Questões
+        const ctxQuestoes = document.getElementById("chartQuestoes");
+        if (ctxQuestoes) {
+          new Chart(ctxQuestoes, {
+            type: "bar",
+            data: {
+              labels: data.analiseQuestoes.map((q) => `Q${q.questao_numero}`),
+              datasets: [
+                {
+                  label: "Taxa de Acerto (%)",
+                  data: data.analiseQuestoes.map((q) => q.taxa_acerto),
+                  backgroundColor: "#8b4789",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  ticks: { color: "#f0f0f0" },
+                },
+                x: { ticks: { color: "#f0f0f0" } },
+              },
+              plugins: {
+                legend: {
+                  labels: { color: "#f0f0f0", font: { size: 14 } },
+                },
+              },
+            },
+          });
+        }
+
+        // Gráfico de Feedback
+        const ctxFeedback = document.getElementById("chartFeedback");
+        if (ctxFeedback && data.feedback.length > 0) {
+          const feedbackPorPergunta = agruparFeedback(data.feedback);
+          new Chart(ctxFeedback, {
+            type: "bar",
+            data: {
+              labels: Object.keys(feedbackPorPergunta),
+              datasets: [
+                {
+                  label: "Respostas Positivas",
+                  data: Object.values(feedbackPorPergunta),
+                  backgroundColor: "#d4a5d4",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { color: "#f0f0f0" },
+                },
+                x: { ticks: { color: "#f0f0f0" } },
+              },
+              plugins: {
+                legend: {
+                  labels: { color: "#f0f0f0", font: { size: 14 } },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      function classificarDesempenho(desempenho) {
+        return desempenho.reduce(
+          (acc, d) => {
+            const p = parseFloat(d.porcentagem);
+            if (p >= 80) acc.excelente++;
+            else if (p >= 60) acc.bom++;
+            else if (p >= 40) acc.regular++;
+            else acc.insuficiente++;
+            return acc;
+          },
+          { excelente: 0, bom: 0, regular: 0, insuficiente: 0 }
+        );
+      }
+
+      function agruparFeedback(feedback) {
+        const perguntas = {};
+        feedback.forEach((f) => {
+          const key = `Pergunta ${f.pergunta_numero}`;
+          if (!perguntas[key]) perguntas[key] = 0;
+          if (f.resposta === 1) perguntas[key] += f.quantidade;
+        });
+        return perguntas;
+      }
+
+      // Carregar ao abrir a página
+      document.addEventListener("DOMContentLoaded", carregarRelatorio);
+    </script>
+  </body>
+</html>

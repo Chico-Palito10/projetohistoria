@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desvendando o Passado - História Interativa</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Overlay inicial -->
+    <div class="overlay"></div>
+
+    <!-- Container Principal -->
+    <div class="container">
+      <!-- Seção de Introdução -->
+      <section id="intro" class="section intro-section active">
+        <div class="intro-content">
+          <h1 class="title-main">DESVENDANDO O PASSADO</h1>
+          <p class="subtitle">
+            Uma jornada pela história através de múltiplas perspectivas<br />
+            Autor: Pedro Ezequiel de Brito
+          </p>
+          <div class="scroll-indicator" onclick="scrollParaProximo('cadastro')">
+            <svg
+              width="34"
+              height="14"
+              viewBox="0 0 34 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M33.5609 1.54346C34.0381 2.5875 33.6881 3.87821 32.7791 4.42633L17.0387 13.9181L1.48663 4.42115C0.580153 3.86761 0.235986 2.57483 0.717909 1.53365C1.19983 0.492464 2.32535 0.097152 3.23182 0.650692L17.0497 9.08858L31.051 0.64551C31.96 0.0973872 33.0837 0.499411 33.5609 1.54346Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de Cadastro -->
+      <section id="cadastro" class="section cadastro-section">
+        <div class="form-container">
+          <h2>Antes de começar...</h2>
+          <p>Digite seu nome para iniciarmos a jornada</p>
+          <form id="form-nome" class="form-nome">
+            <input
+              type="text"
+              id="nome-aluno"
+              placeholder="Seu nome completo"
+              required
+            />
+            <button type="submit" class="btn-primary">Começar Jornada</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Fase 1 -->
+      <section id="fase-1" class="section fase-section">
+        <div class="fase-content">
+          <div class="fase-header">
+            <h2 class="fase-titulo">O "Descobrimento" do Brasil</h2>
+          </div>
+
+          <div class="historia-wrapper">
+            <div class="historia-box versao-ativa">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/gettyimages-1345194140-1024x1024.jpg');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>A História que Você Conhece</h3>
+                <p>
+                  Em 22 de abril de 1500, uma frota portuguesa comandada por
+                  Pedro Álvares Cabral descobriu o Brasil. Os portugueses
+                  chegaram em terra e encontraram os indígenas, que eram
+                  selvagens e viviam nus na natureza.
+                </p>
+              </div>
+            </div>
+
+            <div class="historia-box versao-oculta">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/Iconografia0000063.JPG.jpg');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>Virando a Chave</h3>
+                <p>
+                  Há milhares de anos, milhões de pessoas já viviam aqui, com
+                  culturas complexas e suas próprias histórias. A chegada dos
+                  portugueses não foi um 'descobrimento', mas um encontro entre
+                  culturas que rapidamente se tornou um processo de invasão e
+                  dominação. Do ponto de vista indígena, foi o início de uma
+                  grande tragédia: perda de terras, escravização e doenças que
+                  mataram milhões.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-virar" onclick="virarChave(this)">
+            🔄 Virar a Chave
+          </button>
+          <button class="btn-proximo" onclick="scrollParaProximo('fase-2')">
+            Próxima Fase →
+          </button>
+        </div>
+      </section>
+
+      <!-- Fase 2 -->
+      <section id="fase-2" class="section fase-section">
+        <div class="fase-content">
+          <div class="fase-header">
+            <h2 class="fase-titulo">A "Revolução Industrial"</h2>
+          </div>
+
+          <div class="historia-wrapper">
+            <div class="historia-box versao-ativa">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/fotos-histoacutericas_o1g5ki93ru17rm1b6u15nu13381uoge.png');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>A História que Você Conhece</h3>
+                <p>
+                  A Revolução Industrial, iniciada na Inglaterra, foi um período
+                  de grande avanço tecnológico com a invenção de máquinas a
+                  vapor. Foi uma época de progresso que mudou o mundo para
+                  melhor, criando fábricas e aumentando a produção.
+                </p>
+              </div>
+            </div>
+
+            <div class="historia-box versao-oculta">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/fotos-histoacutericasemdagascarmc3a1960compc3a3ocaixa_81uoge.png');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>Virando a Chave</h3>
+                <p>
+                  Esse 'progresso' foi financiado pela exploração de colônias e
+                  pelo trabalho de milhões de pessoas, incluindo crianças, em
+                  condições desumanas. Enquanto a Europa se enriquecia, nações
+                  da África, Ásia e Américas eram saqueadas por suas riquezas. A
+                  riqueza de uns foi construída sobre a pobreza de muitos.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-virar" onclick="virarChave(this)">
+            🔄 Virar a Chave
+          </button>
+          <button class="btn-proximo" onclick="scrollParaProximo('fase-3')">
+            Próxima Fase →
+          </button>
+        </div>
+      </section>
+
+      <!-- Fase 3 -->
+      <section id="fase-3" class="section fase-section">
+        <div class="fase-content">
+          <div class="fase-header">
+            <h2 class="fase-titulo">As "Grandes Navegações"</h2>
+          </div>
+
+          <div class="historia-wrapper">
+            <div class="historia-box versao-ativa">
+              <div
+                class="historia-imagem"
+                style="background-image: url('/public/images/carandiru.jpg')"
+              ></div>
+              <div class="historia-texto">
+                <h3>A História que Você Conhece</h3>
+                <p>
+                  Os heroicos navegadores portugueses e espanhóis, como Vasco da
+                  Gama e Colombo, desbravaram os oceanos, superando o medo do
+                  desconhecido para expandir o mundo conhecido e levar a cultura
+                  europeia a outros continentes.
+                </p>
+              </div>
+            </div>
+
+            <div class="historia-box versao-oculta">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/fotos-histoacutericasnc3a3oteriacamc3a3om11d9cam91f116hs.png');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>Virando a Chave</h3>
+                <p>
+                  As 'Grandes Navegações' foram, na verdade, o início do
+                  colonialismo. Para os povos da África, significou a violência
+                  brutal do tráfico de escravizados. Para os povos das Américas,
+                  significou genocídio e a destruição de seus modos de vida. A
+                  coragem de uns foi a desgraça de milhões.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-virar" onclick="virarChave(this)">
+            🔄 Virar a Chave
+          </button>
+          <button class="btn-proximo" onclick="scrollParaProximo('fase-4')">
+            Próxima Fase →
+          </button>
+        </div>
+      </section>
+
+      <!-- Fase 4 -->
+      <section id="fase-4" class="section fase-section">
+        <div class="fase-content">
+          <div class="fase-header">
+            <h2 class="fase-titulo">A "Proclamação" da República</h2>
+          </div>
+
+          <div class="historia-wrapper">
+            <div class="historia-box versao-ativa">
+              <div
+                class="historia-imagem"
+                style="background-image: url('/public/images/P009CJHF9003.jpg')"
+              ></div>
+              <div class="historia-texto">
+                <h3>A História que Você Conhece</h3>
+                <p>
+                  Em 15 de novembro de 1889, um grupo de militares, liderados
+                  pelo Marechal Deodoro da Fonseca, proclamou a República,
+                  derrubando a monarquia e instituindo um governo mais
+                  democrático para o povo brasileiro.
+                </p>
+              </div>
+            </div>
+
+            <div class="historia-box versao-oculta">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/queda-da-bastilha-1280x640.jpg');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>Virando a Chave</h3>
+                <p>
+                  A Proclamação da República foi um golpe militar feito pelas
+                  elites, sem a participação do povo. A maioria da população,
+                  incluindo negros libertos pela Lei Áurea um ano antes,
+                  continuou sem direitos políticos e sociais. A mudança de
+                  governo não significou uma democracia para todos, mas a troca
+                  de uma elite por outra no poder.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-virar" onclick="virarChave(this)">
+            🔄 Virar a Chave
+          </button>
+          <button class="btn-proximo" onclick="scrollParaProximo('fase-5')">
+            Próxima Fase →
+          </button>
+        </div>
+      </section>
+
+      <!-- Fase 5 -->
+      <section id="fase-5" class="section fase-section">
+        <div class="fase-content">
+          <div class="fase-header">
+            <h2 class="fase-titulo">A Segunda Guerra Mundial</h2>
+          </div>
+
+          <div class="historia-wrapper">
+            <div class="historia-box versao-ativa">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/gettyimages-515302754-1024x1024.jpg');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>A História que Você Conhece</h3>
+                <p>
+                  Foi uma guerra entre os 'Aliados' (EUA, Inglaterra, URSS)
+                  contra os 'maus' do Eixo (Alemanha, Itália, Japão). Os Aliados
+                  salvaram o mundo do nazismo e trouxeram a liberdade.
+                </p>
+              </div>
+            </div>
+
+            <div class="historia-box versao-oculta">
+              <div
+                class="historia-imagem"
+                style="
+                  background-image: url('/public/images/gettyimages-475803ox-1024x1024.jpg');
+                "
+              ></div>
+              <div class="historia-texto">
+                <h3>Virando a Chave</h3>
+                <p>
+                  Enquanto os Aliados de fato combateram o nazismo, muitas de
+                  suas ações foram problemáticas. Os EUA e a Inglaterra
+                  mantinham políticas racistas e coloniais em seus próprios
+                  territórios. A URSS de Stalin era uma ditadura. A guerra não
+                  foi um simples 'bem contra mal', mas um conflito complexo onde
+                  milhões de pessoas comuns, de todas as nacionalidades,
+                  sofreram as maiores consequências.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-virar" onclick="virarChave(this)">
+            🔄 Virar a Chave
+          </button>
+          <button class="btn-proximo" onclick="scrollParaProximo('quiz')">
+            Ir para o Quiz →
+          </button>
+        </div>
+      </section>
+
+      <!-- Seção do Quiz -->
+      <section id="quiz" class="section quiz-section">
+        <div class="quiz-container">
+          <h2>Quiz de Avaliação</h2>
+          <p class="quiz-intro">
+            Agora é hora de testar o que você aprendeu! Marque a alternativa que
+            melhor completa a frase.
+          </p>
+
+          <form id="form-quiz">
+            <div class="questao">
+              <h3>
+                1. A expressão "Descobrimento do Brasil" é problemática porque:
+              </h3>
+              <label
+                ><input type="radio" name="q1" value="a" required /> a) Ignora
+                que os portugueses foram os primeiros a chegar.</label
+              >
+              <label
+                ><input type="radio" name="q1" value="b" /> b) Desconsidera que
+                milhões de indígenas já viviam aqui.</label
+              >
+              <label
+                ><input type="radio" name="q1" value="c" /> c) Afirma que o
+                Brasil era um local vazio.</label
+              >
+              <label
+                ><input type="radio" name="q1" value="d" /> d) Mostra que a data
+                está incorreta.</label
+              >
+            </div>
+
+            <div class="questao">
+              <h3>
+                2. A riqueza gerada pela Revolução Industrial europeia dependeu:
+              </h3>
+              <label
+                ><input type="radio" name="q2" value="a" required /> a) Apenas
+                do trabalho dos operários ingleses.</label
+              >
+              <label
+                ><input type="radio" name="q2" value="b" /> b) De uma combinação
+                de exploração de colônias e de trabalhadores.</label
+              >
+              <label
+                ><input type="radio" name="q2" value="c" /> c) Principalmente de
+                invenções de outros continentes.</label
+              >
+              <label
+                ><input type="radio" name="q2" value="d" /> d) Exclusivamente do
+                carvão mineral encontrado na Europa.</label
+              >
+            </div>
+
+            <div class="questao">
+              <h3>
+                3. Para os povos da África, as Grandes Navegações europeias
+                representaram:
+              </h3>
+              <label
+                ><input type="radio" name="q3" value="a" required /> a) A chance
+                de aprender novas tecnologias.</label
+              >
+              <label
+                ><input type="radio" name="q3" value="b" /> b) A oportunidade de
+                comerciar de forma justa.</label
+              >
+              <label
+                ><input type="radio" name="q3" value="c" /> c) O início de um
+                violento processo de escravização.</label
+              >
+              <label
+                ><input type="radio" name="q3" value="d" /> d) A libertação de
+                seus impérios antigos.</label
+              >
+            </div>
+
+            <div class="questao">
+              <h3>
+                4. A Proclamação da República no Brasil foi um evento que:
+              </h3>
+              <label
+                ><input type="radio" name="q4" value="a" required /> a) Contou
+                com ampla participação popular e de ex-escravizados.</label
+              >
+              <label
+                ><input type="radio" name="q4" value="b" /> b) Representou a
+                vontade de todas as classes sociais.</label
+              >
+              <label
+                ><input type="radio" name="q4" value="c" /> c) Foi um golpe de
+                elites, sem participação do povo.</label
+              >
+              <label
+                ><input type="radio" name="q4" value="d" /> d) Teve como
+                principal objetivo acabar com a escravidão.</label
+              >
+            </div>
+
+            <div class="questao">
+              <h3>
+                5. A narrativa da Segunda Guerra Mundial como uma luta simples
+                do "bem contra o mal":
+              </h3>
+              <label
+                ><input type="radio" name="q5" value="a" required /> a) É a
+                forma mais correta de entender o conflito.</label
+              >
+              <label
+                ><input type="radio" name="q5" value="b" /> b) Ignora os
+                aspectos problemáticos dos países Aliados.</label
+              >
+              <label
+                ><input type="radio" name="q5" value="c" /> c) Valoriza o
+                sacrifício de todos os soldados.</label
+              >
+              <label
+                ><input type="radio" name="q5" value="d" /> d) Mostra que a
+                guerra era desnecessária.</label
+              >
+            </div>
+
+            <button type="submit" class="btn-primary">Enviar Respostas</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Seção de Resultado do Quiz -->
+      <section id="resultado" class="section resultado-section">
+        <div class="resultado-container">
+          <h2>Resultado do Quiz</h2>
+          <div id="resultado-conteudo"></div>
+          <button class="btn-primary" onclick="scrollParaProximo('feedback')">
+            Continuar para o Questionário
+          </button>
+        </div>
+      </section>
+
+      <!-- Seção de Feedback -->
+      <section id="feedback" class="section feedback-section">
+        <div class="feedback-container">
+          <h2>Ajude a melhorar o projeto!</h2>
+          <p class="feedback-intro">
+            Sua opinião é muito importante. Marque a opção que melhor representa
+            sua opinião. Não há respostas certas ou erradas!
+          </p>
+
+          <form id="form-feedback">
+            <div class="questao-feedback">
+              <h3>
+                1. Antes de jogar, eu já tinha refletido sobre o fato de que a
+                história pode ter mais de uma versão?
+              </h3>
+              <label
+                ><input type="radio" name="f1" value="1" required /> Sim, sempre
+                pensei sobre isso.</label
+              >
+              <label
+                ><input type="radio" name="f1" value="2" /> Já tinha ouvido
+                falar, mas não tinha refletido muito.</label
+              >
+              <label
+                ><input type="radio" name="f1" value="3" /> Não, para mim a
+                história dos livros era a única verdade.</label
+              >
+            </div>
+
+            <div class="questao-feedback">
+              <h3>
+                2. O que você achou da experiência de "virar a chave" e ver a
+                outra versão dos fatos?
+              </h3>
+              <label
+                ><input type="radio" name="f2" value="1" required /> Foi
+                surpreendente e me fez pensar muito.</label
+              >
+              <label
+                ><input type="radio" name="f2" value="2" /> Foi interessante,
+                mas já esperava por algo assim.</label
+              >
+              <label
+                ><input type="radio" name="f2" value="3" /> Foi confuso, não
+                entendi bem a diferença.</label
+              >
+            </div>
+
+            <div class="questao-feedback">
+              <h3>
+                3. Depois de jogar, como você se sente em relação à forma como a
+                história é contada nos livros didáticos?
+              </h3>
+              <label
+                ><input type="radio" name="f3" value="1" required /> Mais
+                crítico e desconfiado.</label
+              >
+              <label
+                ><input type="radio" name="f3" value="2" /> Um pouco mais
+                questionador.</label
+              >
+              <label
+                ><input type="radio" name="f3" value="3" /> Da mesma forma que
+                antes.</label
+              >
+            </div>
+
+            <div class="questao-feedback">
+              <h3>
+                4. Na sua opinião, é importante que as escolas mostrem os
+                diferentes lados de um mesmo evento histórico?
+              </h3>
+              <label
+                ><input type="radio" name="f4" value="1" required /> Sim, é
+                essencial para formarmos nossa própria opinião.</label
+              >
+              <label
+                ><input type="radio" name="f4" value="2" /> É interessante, mas
+                a versão tradicional já é suficiente.</label
+              >
+              <label
+                ><input type="radio" name="f4" value="3" /> Não, isso só deixa a
+                história mais complicada.</label
+              >
+            </div>
+
+            <div class="questao-feedback">
+              <h3>
+                5. O jogo conseguiu te mostrar o "perigo de uma história única"
+                (a ideia de que só existe um lado da história)?
+              </h3>
+              <label
+                ><input type="radio" name="f5" value="1" required /> Sim, ficou
+                muito claro para mim.</label
+              >
+              <label
+                ><input type="radio" name="f5" value="2" /> Mais ou menos,
+                entendi um pouco o conceito.</label
+              >
+              <label
+                ><input type="radio" name="f5" value="3" /> Não, não consegui
+                fazer essa ligação.</label
+              >
+            </div>
+
+            <button type="submit" class="btn-primary">Enviar Feedback</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Seção Final -->
+      <section id="final" class="section final-section">
+        <div class="final-container">
+          <h2>🎓 Parabéns!</h2>
+          <p>Você completou a jornada "Desvendando o Passado"!</p>
+          <p>Suas respostas foram salvas com sucesso.</p>
+          <div class="final-buttons">
+            <a href="relatorio.html" class="btn-primary" target="_blank"
+              >Ver Relatório Geral</a
+            >
+            <button class="btn-secondary" onclick="location.reload()">
+              Reiniciar Jornada
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
