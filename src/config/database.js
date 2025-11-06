@@ -2,10 +2,10 @@ const mysql = require("mysql2");
 
 // Configuração do banco de dados
 const pool = mysql.createPool({
-  host: "sql10.freesqldatabase.com",
-  user: "sql10805361",
-  password: "GxS3dYizIu",
-  database: "sql10805361",
+  host: "mysql-2n2l.onrender.com",
+  user: "root",
+  password: "",
+  database: "projetohistoria",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -14,19 +14,19 @@ const pool = mysql.createPool({
 // Criar banco de dados e tabelas se não existirem
 const setupDatabase = async () => {
   const connection = mysql.createConnection({
-    host: "sql10.freesqldatabase.com",
-    user: "sql10805361",
-    password: "GxS3dYizIu",
+    host: "mysql-2n2l.onrender.com",
+    user: "root",
+    password: "",
   });
 
   try {
     // Criar banco de dados
     await connection
       .promise()
-      .query("CREATE DATABASE IF NOT EXISTS sql10805361");
+      .query("CREATE DATABASE IF NOT EXISTS projetohistoria");
     console.log("✓ Banco de dados criado/verificado");
 
-    await connection.promise().query("USE sql10805361");
+    await connection.promise().query("USE projetohistoria");
 
     // Criar tabela de alunos
     await connection.promise().query(`
