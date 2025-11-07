@@ -1,5 +1,6 @@
 // Estado global
 let alunoId = null;
+let quizRespondido = false;
 let secaoAtual = "intro";
 const ordemSecoes = [
   "intro",
@@ -15,6 +16,28 @@ const ordemSecoes = [
   "final",
 ];
 
+// Carregar imagens automaticamente
+async function carregarImagens() {
+  try {
+    const response = await fetch("/api/images");
+    const images = await response.json();
+
+    const historiaImagens = document.querySelectorAll(".historia-imagem");
+    let imageIndex = 0;
+
+    historiaImagens.forEach((elemento) => {
+      if (images[imageIndex]) {
+        elemento.style.backgroundImage = `url('/public/images/${images[imageIndex]}')`;
+        elemento.style.backgroundSize = "cover";
+        elemento.style.backgroundPosition = "center";
+        imageIndex = (imageIndex + 1) % images.length;
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao carregar imagens:", error);
+  }
+}
+
 // Remover overlay inicial
 window.addEventListener("load", () => {
   setTimeout(() => {
@@ -24,6 +47,9 @@ window.addEventListener("load", () => {
       setTimeout(() => overlay.remove(), 2000);
     }
   }, 500);
+
+  // Carregar imagens
+  carregarImagens();
 
   // Mostrar a intro
   mostrarSecao("intro");
@@ -40,14 +66,23 @@ function adicionarScrollListener() {
   let observerOptions = {
     root: null,
     rootMargin: "0px",
-    threshold: 0.5, // Quando 50% da seção estiver visível
+    threshold: [0, 0.25, 0.5, 0.75, 1], // Múltiplos pontos para seções grandes
   };
 
   let observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const secaoId = entry.target.id;
-        if (secaoId && secaoAtual !== secaoId) {
+
+        // Se for o quiz, feedback ou resultado, usa threshold menor (25%)
+        const secoesGrandes = ["quiz", "feedback", "resultado"];
+        const thresholdMinimo = secoesGrandes.includes(secaoId) ? 0.25 : 0.5;
+
+        if (
+          secaoId &&
+          secaoAtual !== secaoId &&
+          entry.intersectionRatio >= thresholdMinimo
+        ) {
           secaoAtual = secaoId;
           mostrarSecao(secaoId, false); // false = não fazer scroll
         }
@@ -188,7 +223,9 @@ async function handleQuiz(e) {
   e.preventDefault();
 
   if (!alunoId) {
-    alert("Erro: Por favor, recarregue a página e comece novamente.");
+    alert(
+      "Erro: Por favor, verifique se você registrou o seu nome, caso contrário recarregue a página."
+    );
     return;
   }
 
@@ -220,6 +257,7 @@ async function handleQuiz(e) {
     const data = await response.json();
 
     if (data.success) {
+      quizRespondido = true;
       mostrarResultado(data);
       scrollParaProximo("resultado");
     } else {
@@ -285,7 +323,16 @@ async function handleFeedback(e) {
   e.preventDefault();
 
   if (!alunoId) {
-    alert("Erro: ID do aluno não encontrado.");
+    alert(
+      "Erro: ID do aluno não encontrado. Verifique se você registrou seu nome, caso contrário recarregue a página!"
+    );
+    return;
+  }
+
+  if (!quizRespondido) {
+    alert(
+      "Atenção: Você precisa responder ao questionário (quiz) antes de enviar o feedback! Por favor, volte à seção do quiz e responda todas as questões."
+    );
     return;
   }
 
@@ -303,7 +350,7 @@ async function handleFeedback(e) {
   }
 
   if (respostas.length !== 5) {
-    alert("Por favor, responda todas as perguntas!");
+    alert("Por favor, responda todas as perguntas do feedback!");
     return;
   }
 
@@ -324,55 +371,5 @@ async function handleFeedback(e) {
   } catch (error) {
     console.error("Erro:", error);
     alert("Erro ao conectar com o servidor.");
-    // --- Randomizador de imagens de fundo ---
-// Caminho base para as imagens
-const basePath = "/public/images/";
-
-// Lista de imagens disponíveis (como no seu repositório GitHub)
-const imagensDisponiveis = [
-  "001ALA011002.jpg.jpg",
-  "Banner_WP_BN4.jpg",
-  "Iconografia0000063.JPG.jpg",
-  "P009CJHF9003.jpg.jpg",
-  "ayrton-senna-concentrado-cockpit-pb-imola-1994-1280x640.jpg",
-  "carandiru.jpeg",
-  "f16b08531f93c903129f6c874.jpg.webp",
-  "fotos-histoacutericas_o1g5ki9pkn1lmq6pzhquf5i17he.png",
-  "fotos-histoacutericas_o1g5ki9fj61m1f1id9n1h19l6hbe.png",
-  "fotos-histoacutericas_o1g5ki9ch1pl1paackn15m8193tcae.jpg",
-  "fotos-histoacutericas_o1g5ki9n17rum1b6u15nu13381uoge.png",
-  "gettyimages-1345194140-1024x1024.jpg",
-  "gettyimages-475802805-1024x1024.jpg",
-  "gettyimages-475803025-1024x1024.jpg",
-  "gettyimages-515302566-1024x1024.jpg",
-  "gettyimages-93966124-1024x1024.jpg",
-  "gordon-whipped-peter-1280x640.jpg",
-  "header_BrasilianaFotografica2.jpg",
-  "lampiao.jpg",
-  "nsala-boali-congo-belga-1904-1280x640.jpg",
-  "queda-da-bastilha-1280x640.jpg",
-  "racismo-brasil-silvio-romero.jpg"
-];
-
-// Função para obter uma imagem aleatória
-function imagemAleatoria() {
-  const indice = Math.floor(Math.random() * imagensDisponiveis.length);
-  return basePath + imagensDisponiveis[indice];
-}
-
-// Aplica imagens aleatórias em todos os elementos com inline background-image
-function aplicarImagensAleatorias() {
-  const elementos = document.querySelectorAll("[style*='background-image']");
-  elementos.forEach((el) => {
-    el.style.backgroundImage = `url('${imagemAleatoria()}')`;
-    el.style.backgroundSize = "cover";
-    el.style.backgroundPosition = "center";
-  });
-}
-
-// Executa assim que o DOM estiver pronto
-document.addEventListener("DOMContentLoaded", aplicarImagensAleatorias);
-
   }
 }
-
