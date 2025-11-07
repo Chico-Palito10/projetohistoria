@@ -1,22 +1,45 @@
 const mysql = require("mysql2");
+const fs = require("fs");
 
-// Configuração do banco de dados
+// MUDANÇA: Buscando credenciais de Variáveis de Ambiente
+// Use 'dotenv' se estiver rodando localmente.
+const AIVEN_HOST = process.env.DB_HOST;
+const AIVEN_PORT = process.env.DB_PORT;
+const AIVEN_USER = process.env.DB_USER;
+const AIVEN_PASSWORD = process.env.DB_PASSWORD; // A senha será carregada daqui
+const AIVEN_DB = process.env.DB_NAME;
+// O caminho do certificado CA também deve ser definido via variável de ambiente,
+// ou o caminho estático (se preferir manter o arquivo local).
+const CA_CERT_PATH = process.env.CA_CERT_PATH || "./ca_aiven.pem";
+
+// Configuração do banco de dados (Pool de Conexões)
 const pool = mysql.createPool({
-  host: "mysql-2n2l.onrender.com",
-  user: "root",
-  password: "",
-  database: "projetohistoria",
+  host: AIVEN_HOST,
+  port: AIVEN_PORT,
+  user: AIVEN_USER,
+  password: AIVEN_PASSWORD,
+  database: AIVEN_DB,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  // CONFIGURAÇÃO SSL OBRIGATÓRIA PELO AIVEN
+  ssl: {
+    ca: fs.readFileSync(CA_CERT_PATH), // Usa o arquivo CA
+    rejectUnauthorized: true,
+  },
 });
 
 // Criar banco de dados e tabelas se não existirem
 const setupDatabase = async () => {
   const connection = mysql.createConnection({
-    host: "mysql-2n2l.onrender.com",
-    user: "root",
-    password: "",
+    host: AIVEN_HOST,
+    port: AIVEN_PORT,
+    user: AIVEN_USER,
+    password: AIVEN_PASSWORD,
+    ssl: {
+      ca: fs.readFileSync(CA_CERT_PATH),
+      rejectUnauthorized: true,
+    },
   });
 
   try {
@@ -69,6 +92,4 @@ const setupDatabase = async () => {
   }
 };
 
-const promisePool = pool.promise();
-
-module.exports = { pool: promisePool, setupDatabase };
+module.exports = { pool, setupDatabase };
