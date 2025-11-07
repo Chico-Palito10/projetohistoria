@@ -16,21 +16,37 @@ const ordemSecoes = [
   "final",
 ];
 
-// Carregar imagens automaticamente
+// Função auxiliar para embaralhar array (Fisher-Yates shuffle)
+function embaralharArray(array) {
+  const arrayEmbaralhado = [...array]; // Cria uma cópia
+  for (let i = arrayEmbaralhado.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arrayEmbaralhado[i], arrayEmbaralhado[j]] = [
+      arrayEmbaralhado[j],
+      arrayEmbaralhado[i],
+    ];
+  }
+  return arrayEmbaralhado;
+}
+
+// Carregar imagens automaticamente (com aleatoriedade)
 async function carregarImagens() {
   try {
     const response = await fetch("/api/images");
     const images = await response.json();
 
+    // Embaralhar as imagens
+    const imagensEmbaralhadas = embaralharArray(images);
+
     const historiaImagens = document.querySelectorAll(".historia-imagem");
     let imageIndex = 0;
 
     historiaImagens.forEach((elemento) => {
-      if (images[imageIndex]) {
-        elemento.style.backgroundImage = `url('/public/images/${images[imageIndex]}')`;
+      if (imagensEmbaralhadas[imageIndex]) {
+        elemento.style.backgroundImage = `url('/public/images/${imagensEmbaralhadas[imageIndex]}')`;
         elemento.style.backgroundSize = "cover";
         elemento.style.backgroundPosition = "center";
-        imageIndex = (imageIndex + 1) % images.length;
+        imageIndex = (imageIndex + 1) % imagensEmbaralhadas.length;
       }
     });
   } catch (error) {
