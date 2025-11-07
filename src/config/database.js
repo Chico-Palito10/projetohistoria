@@ -1,5 +1,4 @@
 const mysql = require("mysql2"); // MANTIDO
-const fs = require("fs");
 
 // VARIÁVEIS DE AMBIENTE NECESSÁRIAS (INCREMENTO 1)
 const DB_USER = process.env.DB_USER;
@@ -19,7 +18,7 @@ const pool = mysql.createPool({
   // INCREMENTO 2: Porta e SSL para Aiven
   port: DB_PORT,
   ssl: {
-    ca: fs.readFileSync(CA_CERT_PATH),
+    ca: process.env.CA_CERT_PATH,
     rejectUnauthorized: true,
   },
 });
@@ -33,7 +32,7 @@ const setupDatabase = async () => {
     // INCREMENTO 3: Porta e SSL na conexão de setup
     port: DB_PORT,
     ssl: {
-      ca: fs.readFileSync(CA_CERT_PATH),
+      ca: process.env.CA_CERT_PATH,
       rejectUnauthorized: true,
     },
   });
