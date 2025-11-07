@@ -324,5 +324,55 @@ async function handleFeedback(e) {
   } catch (error) {
     console.error("Erro:", error);
     alert("Erro ao conectar com o servidor.");
+    // --- Randomizador de imagens de fundo ---
+// Caminho base para as imagens
+const basePath = "/public/images/";
+
+// Lista de imagens disponíveis (como no seu repositório GitHub)
+const imagensDisponiveis = [
+  "001ALA011002.jpg.jpg",
+  "Banner_WP_BN4.jpg",
+  "Iconografia0000063.JPG.jpg",
+  "P009CJHF9003.jpg.jpg",
+  "ayrton-senna-concentrado-cockpit-pb-imola-1994-1280x640.jpg",
+  "carandiru.jpeg",
+  "f16b08531f93c903129f6c874.jpg.webp",
+  "fotos-histoacutericas_o1g5ki9pkn1lmq6pzhquf5i17he.png",
+  "fotos-histoacutericas_o1g5ki9fj61m1f1id9n1h19l6hbe.png",
+  "fotos-histoacutericas_o1g5ki9ch1pl1paackn15m8193tcae.jpg",
+  "fotos-histoacutericas_o1g5ki9n17rum1b6u15nu13381uoge.png",
+  "gettyimages-1345194140-1024x1024.jpg",
+  "gettyimages-475802805-1024x1024.jpg",
+  "gettyimages-475803025-1024x1024.jpg",
+  "gettyimages-515302566-1024x1024.jpg",
+  "gettyimages-93966124-1024x1024.jpg",
+  "gordon-whipped-peter-1280x640.jpg",
+  "header_BrasilianaFotografica2.jpg",
+  "lampiao.jpg",
+  "nsala-boali-congo-belga-1904-1280x640.jpg",
+  "queda-da-bastilha-1280x640.jpg",
+  "racismo-brasil-silvio-romero.jpg"
+];
+
+// Função para obter uma imagem aleatória
+function imagemAleatoria() {
+  const indice = Math.floor(Math.random() * imagensDisponiveis.length);
+  return basePath + imagensDisponiveis[indice];
+}
+
+// Aplica imagens aleatórias em todos os elementos com inline background-image
+function aplicarImagensAleatorias() {
+  const elementos = document.querySelectorAll("[style*='background-image']");
+  elementos.forEach((el) => {
+    el.style.backgroundImage = `url('${imagemAleatoria()}')`;
+    el.style.backgroundSize = "cover";
+    el.style.backgroundPosition = "center";
+  });
+}
+
+// Executa assim que o DOM estiver pronto
+document.addEventListener("DOMContentLoaded", aplicarImagensAleatorias);
+
   }
 }
+
