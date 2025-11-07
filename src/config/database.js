@@ -29,6 +29,16 @@ const setupDatabase = async () => {
     host: process.env.DB_HOST,
     user: DB_USER,
     password: DB_PASSWORD,
+    database: "projetohistoria",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    connectTimeout: 10000, // 10 segundos
+    port: DB_PORT,
+    ssl: {
+      ca: process.env.CA_CERT_PATH,
+      rejectUnauthorized: true,
+    },
   });
 
   try {
