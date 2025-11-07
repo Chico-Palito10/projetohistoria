@@ -24,5 +24,3 @@ const pool = mysql.createPool({
 });
 
 const promisePool = pool.promise();
-
-module.exports = { pool: promisePool, setupDatabase };
