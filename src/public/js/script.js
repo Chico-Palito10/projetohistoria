@@ -380,8 +380,8 @@ async function handleFeedback(e) {
     const data = await response.json();
 
     if (data.success) {
+      alert("Envio realizado com sucesso! Veja seus resultados no relatório.");
       scrollParaProximo("final");
-      alert("Envio concluído com sucesso, veja os resultados abaixo!");
     } else {
       alert("Erro ao salvar feedback. Tente novamente.");
     }
