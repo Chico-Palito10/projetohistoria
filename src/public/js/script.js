@@ -381,6 +381,7 @@ async function handleFeedback(e) {
 
     if (data.success) {
       scrollParaProximo("final");
+      alert("Envio concluído com sucesso, veja os resultados abaixo!");
     } else {
       alert("Erro ao salvar feedback. Tente novamente.");
     }
